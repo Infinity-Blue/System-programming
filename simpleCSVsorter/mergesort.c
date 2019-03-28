@@ -78,66 +78,66 @@ int merge(Data_Set **data_set, int column_no_for_sort, int start, int mid, int e
 			{	
 				int_value1 = atoi(str1);
 				int_value2 = atoi(str2);
-	        	if(int_value1 < int_value2)
-	        	{	
-	            	*temp_data_set[tmp_index++] = *data_set[p++];
+				if(int_value1 < int_value2)
+				{	
+					*temp_data_set[tmp_index++] = *data_set[p++];
 				}	
-	        	else
-	        	{
-	            	*temp_data_set[tmp_index++] = *data_set[q++];
+				else
+				{
+					*temp_data_set[tmp_index++] = *data_set[q++];
 				}		
 			}
 			else if (data_set[p]->type[column_no_for_sort] == 2 && data_set[q]->type[column_no_for_sort] == 2) 		// float type
 			{	
 				float_value1 = atof(str1);
 				float_value2 = atof(str2);
-	        	if(float_value1 < float_value2)
-	        	{
-	            	*temp_data_set[tmp_index++] = *data_set[p++];
+				if(float_value1 < float_value2)
+				{
+					*temp_data_set[tmp_index++] = *data_set[p++];
 				}
-	        	else
-	        	{
-	            	*temp_data_set[tmp_index++] = *data_set[q++];
+				else
+				{
+					*temp_data_set[tmp_index++] = *data_set[q++];
 				}			
 			}
 			else																									// char type
 			{
-	        	if (strcmp(str1, str2) < 0)
-	        	{
-	            	*temp_data_set[tmp_index++] = *data_set[p++];
+				if (strcmp(str1, str2) < 0)
+				{
+					*temp_data_set[tmp_index++] = *data_set[p++];
 				}
-	        	else
-	        	{
-	            	*temp_data_set[tmp_index++] = *data_set[q++];
+				else
+				{
+					*temp_data_set[tmp_index++] = *data_set[q++];
 				}	
 			}
-   		}
+     	 }
    
 	    if (p > mid)
 	    {
 	    	while(q <= end)    			//copy remaining elements of the first list
 	    	{
 		    	*temp_data_set[tmp_index++] = *data_set[q++];
-			}	    
-		}
-		else
+		}	    
+	    }
+	    else
 		{
-		    while(p <= mid)    			//copy remaining elements of the second list
-		    {
+			while(p <= mid)    			//copy remaining elements of the second list
+			{
 			    *temp_data_set[tmp_index++] = *data_set[p++];
 			}
 		}
-	}
-
+    }
+	
     //Transfer elements from temp_data_set[] back to data_set[]
     for(i = start; i <= end; i++)
     {
       *data_set[i] = *temp_data_set[i - start];
     }
 
-   	temp_memory_deallocation(temp_data_set, tmp_recordcount);
+	temp_memory_deallocation(temp_data_set, tmp_recordcount);
 	free(temp_data_set);    
-    return(0);
+	return(0);
 }
 
 
