@@ -1,9 +1,7 @@
 #include "simpleCSVsorter.h"
-
 /*
 Trim leading & trailing whitespace
 */
-
 
 int mergesort(Data_Set **data_set, int column_no_for_sort, int start, int end)
 {
@@ -12,24 +10,24 @@ int mergesort(Data_Set **data_set, int column_no_for_sort, int start, int end)
     if(start < end)
     {
         mid=(start + end) / 2;
-        ret = mergesort(data_set, column_no_for_sort, start, mid);       	// left recursion
+        ret = mergesort(data_set, column_no_for_sort, start, mid);       	
         if (ret < 0)
         {
-        	return (-1);
-		}
+		return (-1);
+	}
   		
-        ret = mergesort(data_set, column_no_for_sort, mid + 1, end);    		// right recursion
+        ret = mergesort(data_set, column_no_for_sort, mid + 1, end);    		
         if (ret < 0)
         {
         	return (-1);
-		}
+	}
 
         ret = merge(data_set, column_no_for_sort, start, mid, end);    		// merging of two sorted sub-arrays
 	        
         if (ret < 0)
         {
         	return (-1);
-		}
+	}
     }
     return (0);
 }
@@ -38,22 +36,17 @@ int merge(Data_Set **data_set, int column_no_for_sort, int start, int mid, int e
 {
 
     Data_Set **temp_data_set;   // array used for merging
-   
     char *str1;
     char *str2;
-  
     int int_value1, int_value2;
     float float_value1, float_value2;
-
     int i, p, q;
     int tmp_index, tmp_recordcount;
-
     p = start;    				// beginning of the first list
     q = mid + 1;   				// beginning of the second list
     tmp_index = 0;
     tmp_recordcount = end - start + 1;
     
-
     temp_data_set = (Data_Set **) malloc (sizeof(Data_Set) * tmp_recordcount);
     
 	if (temp_data_set == NULL)															// In case of malloc error
@@ -140,13 +133,10 @@ int merge(Data_Set **data_set, int column_no_for_sort, int start, int mid, int e
     for(i = start; i <= end; i++)
     {
       *data_set[i] = *temp_data_set[i - start];
-	}
-	
+    }
 
    	temp_memory_deallocation(temp_data_set, tmp_recordcount);
-    free(temp_data_set);    
- 
-
+	free(temp_data_set);    
     return(0);
 }
 
@@ -208,4 +198,3 @@ void temp_memory_deallocation(Data_Set **temp_data_set, int tmp_recordcount)
    		free (temp_data_set[i]);	
 	}
 }
-
