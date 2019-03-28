@@ -8,9 +8,7 @@
 
 int	RecordCount;		
 int	DelimiterCount;
-
 int	DelimiterFlag;		
-
 Title_Set	title_set;	/* The struct for the Column Haeding (Name). There are totally 28 column haedings */
 Data_Set **data_set;	/* The struct for the Data Record */
 
@@ -21,8 +19,6 @@ Parameter
 2. int *str_prt : The parsing will be started from this postion of the string. 
 */
 static char *myStrtok(char *str, int *str_ptr);
-
-
 /* 
 Whenever we meet the delimitor, the counter of the delimitor is inccreased by one, and
 Whenever the counter of delimitor is over the 28 column headings, the counter of the record is increased by one
@@ -155,22 +151,13 @@ char *argv[];
     	memset(buffer, 0, BUF_SIZE);
 		if (fgets(buffer, BUF_SIZE, fp) == NULL)
 		{
-    		/* Display fgets error msg in the Stderr */
-//    		fprintf(stderr, "fget error \n");
-//			if (feof(fp))
-//    			return (-1);
-//    		else
     			break;
 		}		
-		
 		buf_ptr = 0;
-		
 #ifdef	DEBUG
 	printf("The string come from the Stdin is = %s \n", buffer);
 #endif
-		
 		token = myStrtok(buffer, &buf_ptr);
-		
 		while (token != NULL)				/* In case that a token is found */
 		{
 			if (RecordCount == 0)			/* In case that it is the first record. It is the column headingss */
@@ -245,37 +232,23 @@ Parameter
 static char *myStrtok (char *str, int *str_ptr)
 {
 	int i, j;
-	
-#ifdef	DEBUG0929
 	static int buf_token_ptr = 0;
 	int	str_length;
-	
 	str_length = strlen (str);
-#else
-	int buf_token_ptr;
-#endif
-
 	static char buffer_token[BUF_SIZE];
 
 #ifdef	DEBUG0929
 	if (buf_token_ptr == 0)
-		memset(buffer_token, 0, BUF_SIZE);
-#else	
-	buf_token_ptr = 0;
 	memset(buffer_token, 0, BUF_SIZE);
-#endif
-
+	
 	for (i = 0; i < BUF_SIZE; i++)
-
 	{
 		j = *str_ptr + i;
-#ifdef	DEBUG0929
 		if (j > str_length)
 		{
 			break;
 		}
-#endif
-
+		
 		if (str[j] == '"')					/* In case we meet the Special Quote Character */
 		{
 			if (DelimiterFlag == En_Able)
@@ -283,23 +256,16 @@ static char *myStrtok (char *str, int *str_ptr)
 			else
 				DelimiterFlag = En_Able;
 		}
-
 		if (str[j] == ',' || str[j] == '\n')			/* In case that we meet the delimitor */
 		{
 			if (DelimiterFlag == Dis_Able && str[j] == ',')				/* In case that the delimitor is included in the data. It means the the delimitor is just data itself not the delimitor */
 			{
 				buffer_token[buf_token_ptr++] = str[j];
-#ifdef	DEBUG
-				printf( "DelimiterFlag is Dis_Able\n");  
-#endif
 			}
 			else
 			{
 				/* In case that it is the delimitor or the new line character */	
 				buffer_token[buf_token_ptr] = 0;
-#ifdef	DEBUG
-				printf( "token is %s \n", buffer_token);  
-#endif 
 #ifdef DEBUG0929
 				buf_token_ptr = 0;
 				if (RecordCount == 0 && str[j] == '\n')	// when meet the first new line, the number of columns (Fields) is fixed
@@ -374,56 +340,10 @@ int data_parsing(char *token)
 	j = find_title_index(DelimiterCount % no_columns);
 	if (j < no_columns)
 	{
-	//	data_set[RecordCount-1]->type[i] = field_set[j].type;
                  data_set[RecordCount-1]->type[i] = Field_Set_Type[j];
 
 	}
-//	printf ("i = %d, DelimiterCount / no_columns = %d\n",i,DelimiterCount % no_columns);
-#endif
-
-/*
-	switch (j)
-   	{
-   		case 0:		// color
-		case 1:		// director_name
-		case 6:		// actor_2_name
-		case 9:		// genres
-		case 10:	// actor_1_name
-		case 11:	// movie_title
-		case 14:	// actor_3_name
-		case 16:	// plot_keywords
-		case 17:	// move_imdb_link
-		case 19:	// language
-		case 20:	// country
-		case 21:	// content_rating
-		   	data_set[RecordCount-1]->type[i] = 0;		// string type
-   			break;	
-		case 2:		// num_critic_for_reviews
-		case 3:		// duration
-		case 4:		// director_facebook_likes
-		case 5:		// actor_3_facebook_likes
-		case 7:		// actor_1_facebook_likes
-		case 12:	// num_voted_users
-		case 13:	// cast_total_facebook_likes
-		case 15:	// facenumber_in_poster
-		case 18:	// num_user_for_reviews
-		case 23:	// title_year
-		case 24:	// actor_2_facebook_likes
-		case 25:	// imdb_score
-		case 26:	// aspect_ratio
-		case 27:	// movie_facebook_likes
-		   	data_set[RecordCount-1]->type[i] = 1;		// int type
-   			break;
-		case 8:		// gross
-		case 22:	// budget
-		   	data_set[RecordCount-1]->type[i] = 2;		// float type
-   			break;
-   		default:
-   			data_set[RecordCount-1]->type[i] = 0;		// string type
-			break;
-	}
-*/
-	
+#endif	
 	tok_len = strlen(token);
 #ifdef	DEBUG
 	printf( "token length is %d, record no is %d, field no is %d\n", tok_len, RecordCount, i);  
@@ -465,36 +385,26 @@ void display_result()
 		k = i % no_columns;
 		if (j == 0)
 		{
-#ifdef DEBUG
 			fprintf(fp_w, "%s", title_set.column_headings[i % no_columns]);
-#else
 			printf("%s", title_set.column_headings[i % no_columns]);
-#endif
 		}
+		
 		else
 		{
-#ifdef DEBUG
 			fprintf(fp_w, "%s", (char *)data_set[j-1]->field_ptr[k]);
-#else
 			printf("%s", (char *)data_set[j-1]->field_ptr[k]);
-#endif
 		}
 		
 		if (k == (no_columns - 1))
 		{
-#ifdef DEBUG
 			fprintf(fp_w, "\n");
-#else
 			printf("\n");
-#endif
 		}
+		
 		else
 		{
-#ifdef DEBUG
 			fprintf(fp_w, ",");
-#else
 			printf(",");
-#endif
 		}
 	}
 }
